@@ -214,6 +214,20 @@ class Controller(dbus.service.Object):
             self.call_on_head_not_playing('Play')
 
     @dbus.service.method(dbus_interface=MY_INTERFACE)
+    def Play(self):
+        log.info('Method call for Play.')
+        if len(self.playing) > 0:
+            pass
+        else:
+            self.call_on_head_not_playing('Play')
+
+    @dbus.service.method(dbus_interface=MY_INTERFACE)
+    def Pause(self):
+        log.info('Method call for Pause.')
+        if len(self.playing) > 0:
+            self.call_on_all_playing('Pause')
+
+    @dbus.service.method(dbus_interface=MY_INTERFACE)
     def Next(self):
         log.info('Method call for Next.')
         if len(self.playing) > 0:
@@ -263,7 +277,7 @@ def main():
             description='A small daemon for the Linux desktop that '
                         'intelligently controls MPRIS2-compatible media players')
     parser.add_argument('call', nargs='?', metavar='METHOD',
-            help='method to call on daemon (PlayPause, Next, Previous, Quit, Status, or Metadata)')
+            help='method to call on daemon (Play, Pause, PlayPause, Next, Previous, Quit, Status, or Metadata)')
     parser.add_argument('--no-fork', '--nofork', '--foreground',
             action='store_true', help='do not fork daemon to the background')
     parser.add_argument('--version', action='version',
